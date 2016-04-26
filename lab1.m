@@ -24,4 +24,4 @@ T05u=zam(zmie,T05v,'q')
 % example of substitution of the join variables values
 % and constant values into the T0e matrix for the RRP manipulator example
 % please use meters and radians
-T05n=subs(T05,{th1,d1,th2,a3,th4,d5},{pi/3,0.4,pi/4,0.2,pi/3,015})
+T05n=subs(T05,{th1,d1,th2,a3,th4,d5},{pi/3,0.4,pi/4,0.2,pi/3,0.15})
