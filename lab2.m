@@ -48,7 +48,7 @@ a3_inverse= sqrt(Pa(1,1)^2+Pa(2,1)^2+(Pa(3,1)-d1_input)^2)
 %calculate the 4th variable
 R03R05=T03_real(1:3,1:3)'*T05_real(1:3,1:3)
 R03e = T3e(1:3,1:3)
-Res1 = solve(R03e(1,2)== R03R05(1,2),th4)
+Res1 = solve(tan(th4)== (R03R05(2,2)/R03R05(1,2)),th4)
 th4d = double(Res1);
 display(rad2deg(th4d),'th4')
 
