@@ -5,8 +5,8 @@ syms Ek1 Ek2 Ek3 Ek m1 m2 m3 v2 v3 J2 s2 q1 q2 q3 dq1 dq2 dq3 real
 syms Ep1 Ep2 Ep3 g real
 syms L t ddq1 ddq2 ddq3 S1 S2 S3 S4 real
 % kinetic energy
-v2 = (s2*dq2+q1*sin(q2))^2+(dq1*cos(q2))^2
-v3 = (dq2*q3+dq3+dq1*sin(q2))^2+(dq1*cos(q2)+q3)
+v2 = sqrt((s2*dq2+dq1*sin(q2))^2+(dq1*cos(q2))^2)
+v3 = sqrt((dq2*q3+dq3+dq1*sin(q2))^2+(dq1*cos(q2)+q3)^2)
 Ek1=(1/2)*m1*(dq1)^2
 Ek2=(1/2)*m2*(v2)^2+(1/2)*J2*(dq2)^2
 Ek3=(1/2)*m3*(v3)^2
