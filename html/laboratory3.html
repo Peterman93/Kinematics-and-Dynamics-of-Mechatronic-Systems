@@ -1,0 +1,339 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Kinematics and Dynamics of Mechatronic Systems</title><meta name="generator" content="MATLAB 8.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-05-29"><meta name="DC.source" content="laboratory3.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, tt, code { font-size:12px; }
+pre { margin:0px 0px 20px; }
+pre.error { color:red; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Kinematics and Dynamics of Mechatronic Systems</h1><!--introduction--><p>3rd laboratory task</p><p><i>Piotr Bury</i> , <i>Maciej Paczocha</i></p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Determine a Homogeneous Transformation matrix</a></li><li><a href="#2">multiplication of matrices to obtain the position of the links</a></li><li><a href="#3">Determining the constants and random values of joint coordinates in the ranges</a></li><li><a href="#4">Subtitute random generated ranges into the matrices</a></li><li><a href="#5">Defining origin and constant position of the 1st link</a></li><li><a href="#6">Draw the workspace</a></li></ul></div><h2>Determine a Homogeneous Transformation matrix<a name="1"></a></h2><pre class="codeinput">clear <span class="string">all</span>; clc
+
+<span class="comment">% declaration of symbols</span>
+syms <span class="string">th1</span> <span class="string">d1</span> <span class="string">th2</span> <span class="string">a3</span> <span class="string">th4</span> <span class="string">d5</span> <span class="string">q1</span> <span class="string">q2</span> <span class="string">q3</span>
+<span class="comment">% Determination of a symbolic form of HT matrices &#8211; application of mA function</span>
+A1=mA(th1,d1,0,sym(pi/2));
+A2=mA(th2,0,0,0);
+A3=mA(0,0,a3,0);
+A4=mA(th4,0,0,sym(pi/2));
+A5=mA(sym(pi/2),d5,0,0);
+</pre><h2>multiplication of matrices to obtain the position of the links<a name="2"></a></h2><pre class="codeinput">T01=A1;
+T05=A1*A2*A3*A4*A5;
+</pre><h2>Determining the constants and random values of joint coordinates in the ranges<a name="3"></a></h2><p>input constants</p><pre class="codeinput">d1_input = 0.4;
+d5_input = 0.15;
+<span class="comment">% Random selection of the values of joint coordinates</span>
+th1_input = pi/2-pi*rand;
+th2_input = pi/4-(pi/2)*rand;
+a3_input=0.6-rand*0.4;
+th4_input = pi/2-(pi)*rand;
+</pre><h2>Subtitute random generated ranges into the matrices<a name="4"></a></h2><pre class="codeinput">T01_real=subs(T01,{th1,d1},{th1_input,d1_input});
+T05_real=subs(T05,{th1,d1,th2,a3,th4,d5},{th1_input,d1_input, th2_input, a3_input, th4_input, d5_input});
+<span class="comment">% Calculation of orientation of the 3rd link in relation to the 4th link</span>
+<span class="comment">%</span>
+P_real = [T05_real(1,4); T05_real(2,4); T05_real(3,4)];
+Pw = [T05_real(1,3);T05_real(2,3);T05_real(3,3)]*d5_input;
+</pre><h2>Defining origin and constant position of the 1st link<a name="5"></a></h2><pre class="codeinput">origin = [0 0 0];
+joint1 = [T01(1,4) T01(2,4) T01(3,4)];
+<span class="comment">% Position of joint1 remains constant as it's only dependent from d1 constant variable</span>
+<span class="comment">% joint2 position cannot be distinguished as it wouldn't be visible in the</span>
+<span class="comment">% workspace visualization</span>
+</pre><h2>Draw the workspace<a name="6"></a></h2><pre class="codeinput">x=[0 0.02 0.04 0.06 0.08 0.1 0.12 0.14 0.16 0.18];
+y=[0.95 0.97 0.99 1.01 1.03 1.05 1.07 1.09 1.11 1.13];
+z=[0.75 0.77 0.79 0.81 0.83 0.85 0.87 0.89 0.91 0.93];
+path=[x; y; z];
+figure(1);
+plot3(x,y,z,<span class="string">'--r'</span>)
+<span class="keyword">for</span> i=1:10
+    joint4=path(:,i)'
+    joint3=joint4-Pw'
+    joint1=[T01_real(1,4) T01_real(2,4) T01_real(3,4)]
+    pts34=[joint4; joint3];
+    pts13=[joint3; joint1];
+    pts01=[joint1; origin];
+    line(pts34(:,1), pts34(:,2),pts34(:,3));
+    line(pts13(:,1), pts13(:,2),pts13(:,3));
+    line(pts01(:,1), pts01(:,2),pts01(:,3));
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">
+joint4 =
+
+             0          0.95          0.75
+
+
+joint3 =
+
+         -0.09          0.84          0.81
+
+
+joint1 =
+
+             0             0          0.40
+
+
+joint4 =
+
+          0.02          0.97          0.77
+
+
+joint3 =
+
+         -0.07          0.86          0.83
+
+
+joint1 =
+
+             0             0          0.40
+
+
+joint4 =
+
+          0.04          0.99          0.79
+
+
+joint3 =
+
+         -0.05          0.88          0.85
+
+
+joint1 =
+
+             0             0          0.40
+
+
+joint4 =
+
+          0.06          1.01          0.81
+
+
+joint3 =
+
+         -0.03          0.90          0.87
+
+
+joint1 =
+
+             0             0          0.40
+
+
+joint4 =
+
+          0.08          1.03          0.83
+
+
+joint3 =
+
+         -0.01          0.92          0.89
+
+
+joint1 =
+
+             0             0          0.40
+
+
+joint4 =
+
+          0.10          1.05          0.85
+
+
+joint3 =
+
+          0.01          0.94          0.91
+
+
+joint1 =
+
+             0             0          0.40
+
+
+joint4 =
+
+          0.12          1.07          0.87
+
+
+joint3 =
+
+          0.03          0.96          0.93
+
+
+joint1 =
+
+             0             0          0.40
+
+
+joint4 =
+
+          0.14          1.09          0.89
+
+
+joint3 =
+
+          0.05          0.98          0.95
+
+
+joint1 =
+
+             0             0          0.40
+
+
+joint4 =
+
+          0.16          1.11          0.91
+
+
+joint3 =
+
+          0.07          1.00          0.97
+
+
+joint1 =
+
+             0             0          0.40
+
+
+joint4 =
+
+          0.18          1.13          0.93
+
+
+joint3 =
+
+          0.09          1.02          0.99
+
+
+joint1 =
+
+             0             0          0.40
+
+</pre><img vspace="5" hspace="5" src="laboratory3_01.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2012b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Kinematics and Dynamics of Mechatronic Systems
+% 3rd laboratory task
+% 
+%
+% _Piotr Bury_ , _Maciej Paczocha_
+
+%% Determine a Homogeneous Transformation matrix
+%
+clear all; clc
+
+% declaration of symbols
+syms th1 d1 th2 a3 th4 d5 q1 q2 q3
+% Determination of a symbolic form of HT matrices – application of mA function
+A1=mA(th1,d1,0,sym(pi/2));
+A2=mA(th2,0,0,0);
+A3=mA(0,0,a3,0);
+A4=mA(th4,0,0,sym(pi/2));
+A5=mA(sym(pi/2),d5,0,0);
+
+%% multiplication of matrices to obtain the position of the links
+T01=A1;
+T05=A1*A2*A3*A4*A5;
+
+%% Determining the constants and random values of joint coordinates in the ranges
+% input constants
+d1_input = 0.4;
+d5_input = 0.15;
+% Random selection of the values of joint coordinates
+th1_input = pi/2-pi*rand;
+th2_input = pi/4-(pi/2)*rand;
+a3_input=0.6-rand*0.4;
+th4_input = pi/2-(pi)*rand;
+
+%% Subtitute random generated ranges into the matrices
+T01_real=subs(T01,{th1,d1},{th1_input,d1_input});
+T05_real=subs(T05,{th1,d1,th2,a3,th4,d5},{th1_input,d1_input, th2_input, a3_input, th4_input, d5_input});
+% Calculation of orientation of the 3rd link in relation to the 4th link
+% 
+P_real = [T05_real(1,4); T05_real(2,4); T05_real(3,4)];
+Pw = [T05_real(1,3);T05_real(2,3);T05_real(3,3)]*d5_input;
+
+%% Defining origin and constant position of the 1st link
+origin = [0 0 0];
+joint1 = [T01(1,4) T01(2,4) T01(3,4)]; 
+% Position of joint1 remains constant as it's only dependent from d1 constant variable
+% joint2 position cannot be distinguished as it wouldn't be visible in the
+% workspace visualization
+
+%% Draw the workspace
+x=[0 0.02 0.04 0.06 0.08 0.1 0.12 0.14 0.16 0.18];
+y=[0.95 0.97 0.99 1.01 1.03 1.05 1.07 1.09 1.11 1.13];
+z=[0.75 0.77 0.79 0.81 0.83 0.85 0.87 0.89 0.91 0.93];
+path=[x; y; z];
+figure(1);
+plot3(x,y,z,'REPLACE_WITH_DASH_DASHr')
+for i=1:10
+    joint4=path(:,i)'
+    joint3=joint4-Pw'
+    joint1=[T01_real(1,4) T01_real(2,4) T01_real(3,4)]
+    pts34=[joint4; joint3];
+    pts13=[joint3; joint1];
+    pts01=[joint1; origin];
+    line(pts34(:,1), pts34(:,2),pts34(:,3));
+    line(pts13(:,1), pts13(:,2),pts13(:,3));
+    line(pts01(:,1), pts01(:,2),pts01(:,3));
+end
+
+
+
+
+
+##### SOURCE END #####
+--></body></html>

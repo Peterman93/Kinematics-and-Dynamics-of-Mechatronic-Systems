@@ -5,6 +5,7 @@
 
 %% Determine a Homogeneous Transformation matrix
 %
+format bank
 clear all; clc
 % declaration of symbols
 syms th1 d1 th2 a3 th4 d5 q1 q2 q3
@@ -28,19 +29,19 @@ d5_input = 0.15;
 % Drawing the workspace on the 1st figure
 figure(1);
 hold on
-% for th1_input=-pi/2:pi/8:pi/2%18
-%    for th2_input=-pi/4:pi/4:pi/4 %8
-%        for a3_input=0.2:0.1:0.6 
-%            for th4_input=-pi/2:pi/2:pi/2 %4
-%                T05_r=subs(T05,{th1,d1,th2,a3,th4,d5},{th1_input,d1_input, th2_input, a3_input, th4_input, d5_input});
-%                P_r = [T05_r(1,4); T05_r(2,4); T05_r(3,4)];
-%                plot3(P_r(1,1),P_r(2,1),P_r(3,1),'.')
-%            end
-%        end
-%    end
-% end
-
-%% Determine the paths
+for th1_input=-pi/2:pi/18:pi/2
+   for th2_input=-pi/4:pi/8:pi/4 
+       for a3_input=0.2:0.1:0.6 
+           for th4_input=-pi/2:pi/4:pi/2 
+               T05_r=subs(T05,{th1,d1,th2,a3,th4,d5},{th1_input,d1_input, th2_input, a3_input, th4_input, d5_input});
+               P_r = [T05_r(1,4); T05_r(2,4); T05_r(3,4)];
+               plot3(P_r(1,1),P_r(2,1),P_r(3,1),'.')
+           end
+       end
+   end
+end
+%
+% Determine the paths
 %Determine the 1st path
 x1=[0.39 0.39 0.29 0.23 0.21 0.19  0.17  0.15 0.14 0.12];
 y1=[0.46 0.44 0.40 0.30 0.20 0.10 -0.10 -0.2 -0.3 -0.3];
@@ -53,7 +54,8 @@ y2=[0.45  0.45 0.38 0.35 0.24 0.00 -0.2 -0.27 -0.42 -0.53];
 z2=[-0.05 0.24 0.57 0.78 0.70 0.60 0.4  0.3   0.2   -0.13];
 path2=[x2; y2; z2];
 
-%% Draw both paths on the 1st figure
+%% Draw both paths on the 2nd figure
+hold on
 plot3(x1,y1,z1,'--r')
 %hold on
 plot3(x2,y2,z2,'--g')
@@ -64,23 +66,26 @@ zlabel('Z')
 hold off
 
 %% 1st path: Generating motion path for each joint
-figure(2)
 
+%Placeholder for cartesian coordinates gathering
+JointCoordinates1 = zeros(10,4);
+%% 
+% Drawing motion path for each joint
+figure(2)
 hold on
 grid on
 xlabel('X')
 ylabel('Y')
 zlabel('Z')
-%% 
-% Drawing motion path for each joint
 plot3(x1,y1,z1,'--r');
+
 for i=1:10
     joint4=path1(:,i);   
     %calculation of q1,q2,q3,q4 with inverse kinematics
     th1_inverse=atan2(joint4(2,1),joint4(1,1));
     th2_inverse=atan2((joint4(3,1)-d1_input),sqrt(joint4(1,1)^2+joint4(2,1)^2));
     a3_inverse= sqrt(joint4(1,1)^2+joint4(2,1)^2+(joint4(3,1)-d1_input)^2);
-    th4_inverse = pi/2-(pi)*rand; %not possible to select specific range for q4, so that it will be generated randomly
+    th4_inverse = pi/4-(pi/2)*rand; %not possible to select specific range for q4, so that it will be generated randomly
     %determining the matrix for points belonging to path
     T01_real=subs(T01,{th1,d1},{th1_inverse,d1_input});
     T05_real=subs(T05,{th1,d1,th2,a3,th4,d5},{th1_inverse,d1_input, th2_inverse, a3_inverse, th4_inverse, d5_input});
@@ -92,29 +97,34 @@ for i=1:10
     pts01=[joint1'; [0 0 0]];
     line(pts34(:,1), pts34(:,2),pts34(:,3));
     line(pts13(:,1), pts13(:,2),pts13(:,3));
-    line(pts01(:,1), pts01(:,2),pts01(:,3));    
+    line(pts01(:,1), pts01(:,2),pts01(:,3));
+    JointCoordinates1(i,1)=th1_inverse;JointCoordinates1(i,2)=th2_inverse;JointCoordinates1(i,3)=a3_inverse;JointCoordinates1(i,4)=th4_inverse; %gather joint coordinates
 end
+CartesianCoordinates1=path1';
 hold off
 
 
 %% 2nd path: Generating motion path for each joint
+
+%Placeholder for cartesian coordinates gathering
+JointCoordinates2 = zeros(10,4);
+%% 
+% Drawing motion path for each joint
 figure(3)
 hold on
 grid on
 xlabel('X')
 ylabel('Y')
 zlabel('Z')
-CartesianCoord = []
-%% 
-% Drawing motion path for each joint
 plot3(x2,y2,z2,'--g');
+
 for i=1:10
     joint4=path2(:,i);   
     %calculation of q1,q2,q3,q4 with inverse kinematics
     th1_inverse=atan2(joint4(2,1),joint4(1,1));
     th2_inverse=atan2((joint4(3,1)-d1_input),sqrt(joint4(1,1)^2+joint4(2,1)^2));
     a3_inverse= sqrt(joint4(1,1)^2+joint4(2,1)^2+(joint4(3,1)-d1_input)^2);
-    th4_inverse = pi/2-(pi)*rand; %not possible to select specific range for q4, so that it will be generated randomly
+    th4_inverse = pi/4-(pi/2)*rand; %not possible to select specific range for q4, so that it will be generated randomly
     %determining the matrix for points belonging to path
     T01_real=subs(T01,{th1,d1},{th1_inverse,d1_input});
     T05_real=subs(T05,{th1,d1,th2,a3,th4,d5},{th1_inverse,d1_input, th2_inverse, a3_inverse, th4_inverse, d5_input});
@@ -126,8 +136,12 @@ for i=1:10
     pts01=[joint1'; [0 0 0]];
     line(pts34(:,1), pts34(:,2),pts34(:,3));
     line(pts13(:,1), pts13(:,2),pts13(:,3));
-    line(pts01(:,1), pts01(:,2),pts01(:,3));    
+    line(pts01(:,1), pts01(:,2),pts01(:,3));
+    
+    JointCoordinates2(i,1)=th1_inverse;JointCoordinates2(i,2)=th2_inverse;JointCoordinates2(i,3)=a3_inverse;JointCoordinates2(i,4)=th4_inverse; %gather joint coordinates
 end
+
+CartesianCoordinates2 = path2'; %inversing the path to easier gathering to table
 hold off
 
 
