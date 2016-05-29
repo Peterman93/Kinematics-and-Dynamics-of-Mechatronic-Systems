@@ -1,5 +1,5 @@
 % This script determines a Homogeneous Transformation matrix
-clear all
+clear all; clc; format bank
 % declaration of symbols
 syms th1 d1 th2 a3 th4 d5 q1 q2 q3
 % determination of a symbolic form of HT matrices –
