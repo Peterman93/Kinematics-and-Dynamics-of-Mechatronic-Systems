@@ -3,11 +3,10 @@
 % *4th laboratory task*
 %
 % _Piotr Bury_ , _Maciej Paczocha_
-%
-%% For vectors of joint variables Q1, Q2, … QN corresponding to the prepared motion paths plan the spline joint trajectory of the type 5-(5)-5.
 
-%planning of 10 segment polynomial spline joint trajectories
-%corresponding to the assumed path
+%%
+% planning of 10 segment polynomial spline joint trajectories
+% corresponding to the assumed path
 Q1=[1.570796 1.570796 1.570796 1.19029 0.785398 0 -0.5586 -0.7854 -1.49949 -1.5708];
 Q2=[-0.7854 -0.34162 0.420663 0.789412 0.723839 0.694738 0 -0.25614 -0.44343 -0.7854];
 Q3=[0.636396 0.477598 0.416293 0.535257 0.45299 0.31241 0.377359 0.394715 0.466154 0.749533];
@@ -40,9 +39,9 @@ close(wb1);
 %% Evaluate, present graphically and assess the resultant Cartesian path and the broken line resulting from composition of Q1, Q2, … QN vectors for the both paths 
 syms th1 d2 th3 th4 a2 a3
 % calculate displacement in 3D - formulas
-XX=cos(th1)*(a2+a3*cos(th3));
-YY=sin(th1)*(a2+a3*cos(th3));
-ZZ=d2-a3*sin(th3);
+XX=cos(th1)*(a2+a3*cos(th3))
+YY=sin(th1)*(a2+a3*cos(th3))
+ZZ=d2-a3*sin(th3)
 % calculate the 3D path
 X=double(subs(XX,{th1,d2,th3,th4,a2,a3},{q1,q2,q3,q4,0.1,0.5}));
 Y=double(subs(YY,{th1,d2,th3,th4,a2,a3},{q1,q2,q3,q4,0.1,0.5}));
@@ -53,15 +52,11 @@ YQ=double(subs(YY,{th1,d2,th3,th4,a2,a3},{Q1,Q2,Q3,q4,0.1,0.5}));
 ZQ=double(subs(ZZ,{th1,d2,th3,th4,a2,a3},{Q1,Q2,Q3,q4,0.1,0.5}));
 
 %%
-%Draw the paths
+% Draw the paths
 figure(4)
 plot3(X',Y',Z','--g');
 figure(5)
 plot3(XQ,YQ,ZQ,'--r');
-%% 
-%Concatenating coodinate vectors to form data for both paths
+%% Concatenating coodinate vectors to form data for both paths
 Path3D=[X,Y,Z];
 BrokenLine3D=[XQ',YQ',ZQ'];
-
-Path3DLength = sum( sqrt( sum( diff(Path3D,1,1).^2 ,2)) ,1)
-BrokenLine3DLength = sum( sqrt( sum( diff(BrokenLine3D,1,1).^2 ,2)) ,1)

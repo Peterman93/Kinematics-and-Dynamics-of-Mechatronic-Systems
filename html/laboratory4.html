@@ -1,0 +1,203 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Kinematics and Dynamics of Mechatronic Systems</title><meta name="generator" content="MATLAB 8.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-05-31"><meta name="DC.source" content="laboratory4.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, tt, code { font-size:12px; }
+pre { margin:0px 0px 20px; }
+pre.error { color:red; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Kinematics and Dynamics of Mechatronic Systems</h1><!--introduction--><p><b>4th laboratory task</b></p><p><i>Piotr Bury</i> , <i>Maciej Paczocha</i></p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">For vectors of joint variables Q1, Q2, &#8230; QN corresponding to the prepared motion paths</a></li><li><a href="#2">Evaluate, present graphically and assess the resultant Cartesian path and the broken line resulting from composition of Q1, Q2, &#8230; QN vectors for the both paths</a></li></ul></div><h2>For vectors of joint variables Q1, Q2, &#8230; QN corresponding to the prepared motion paths<a name="1"></a></h2><p>plan the spline joint trajectory of the type 5-(5)-5.</p><pre class="codeinput"><span class="comment">%planning of 10 segment polynomial spline joint trajectories</span>
+<span class="comment">%corresponding to the assumed path</span>
+Q1=[1.570796 1.570796 1.570796 1.19029 0.785398 0 -0.5586 -0.7854 -1.49949 -1.5708];
+Q2=[-0.7854 -0.34162 0.420663 0.789412 0.723839 0.694738 0 -0.25614 -0.44343 -0.7854];
+Q3=[0.636396 0.477598 0.416293 0.535257 0.45299 0.31241 0.377359 0.394715 0.466154 0.749533];
+Q4=[-0.32503 -0.7846 0.333245 0.134268 0.055229 -0.41462 -0.49983 0.627971 0.505613 0.220485];
+<span class="comment">% setting the duration time of each trajectory segment (in seconds)</span>
+T=[0.2,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.2];
+<span class="comment">% setting values of initial and final joint velocity as well as</span>
+<span class="comment">% the initial and final joint acceleration (usually they are set to 0s)</span>
+V=[0 0];A=[0 0];
+<span class="comment">% planning of the initial trajectory of type 555 (evaluation of the</span>
+<span class="comment">% coefficients)</span>
+y1=fun_path(Q1,T,V,A);
+y2=fun_path(Q2,T,V,A);
+y3=fun_path(Q3,T,V,A);
+y4=fun_path(Q4,T,V,A);
+<span class="comment">% setting the time axis resolution</span>
+dt=0.01;
+<span class="comment">% calculate joint displacements, velocities and accelerations for 3 joints</span>
+wb1=waitbar(0,<span class="string">'calculate joint displacement'</span>);
+[q1,v1,aa1,tt,ti]=fun_graph(y1,T,dt,<span class="string">'r'</span>);
+i=1;waitbar(i/3,wb1)
+[q2,v2,aa2,tt,ti]=fun_graph(y2,T,dt,<span class="string">'b'</span>);
+i=2;waitbar(i/3,wb1)
+[q3,v3,aa3,tt,ti]=fun_graph(y3,T,dt,<span class="string">'g'</span>);
+i=3;waitbar(i/3,wb1)
+[q4,v4,aa4,tt,ti]=fun_graph(y4,T,dt,<span class="string">'g'</span>);
+i=4;waitbar(i/3,wb1)
+close(wb1);
+</pre><img vspace="5" hspace="5" src="laboratory4_01.png" alt=""> <img vspace="5" hspace="5" src="laboratory4_02.png" alt=""> <img vspace="5" hspace="5" src="laboratory4_03.png" alt=""> <h2>Evaluate, present graphically and assess the resultant Cartesian path and the broken line resulting from composition of Q1, Q2, &#8230; QN vectors for the both paths<a name="2"></a></h2><pre class="codeinput">syms <span class="string">th1</span> <span class="string">d2</span> <span class="string">th3</span> <span class="string">th4</span> <span class="string">a2</span> <span class="string">a3</span>
+<span class="comment">% calculate displacement in 3D - formulas</span>
+XX=cos(th1)*(a2+a3*cos(th3));
+YY=sin(th1)*(a2+a3*cos(th3));
+ZZ=d2-a3*sin(th3);
+<span class="comment">% calculate the 3D path</span>
+X=double(subs(XX,{th1,d2,th3,th4,a2,a3},{q1,q2,q3,q4,0.1,0.5}));
+Y=double(subs(YY,{th1,d2,th3,th4,a2,a3},{q1,q2,q3,q4,0.1,0.5}));
+Z=double(subs(ZZ,{th1,d2,th3,th4,a2,a3},{q1,q2,q3,q4,0.1,0.5}));
+<span class="comment">% calculate the 3D broken line</span>
+XQ=double(subs(XX,{th1,d2,th3,th4,a2,a3},{Q1,Q2,Q3,q4,0.1,0.5}));
+YQ=double(subs(YY,{th1,d2,th3,th4,a2,a3},{Q1,Q2,Q3,q4,0.1,0.5}));
+ZQ=double(subs(ZZ,{th1,d2,th3,th4,a2,a3},{Q1,Q2,Q3,q4,0.1,0.5}));
+</pre><pre class="codeinput"><span class="comment">%Draw the paths</span>
+figure(4)
+plot3(X',Y',Z',<span class="string">'--g'</span>);
+figure(5)
+plot3(XQ,YQ,ZQ,<span class="string">'--r'</span>);
+</pre><img vspace="5" hspace="5" src="laboratory4_04.png" alt=""> <img vspace="5" hspace="5" src="laboratory4_05.png" alt=""> <pre class="codeinput"><span class="comment">%Concatenating coodinate vectors to form data for both paths</span>
+Path3D=[X,Y,Z];
+BrokenLine3D=[XQ',YQ',ZQ'];
+
+Path3DLength = sum( sqrt( sum( diff(Path3D,1,1).^2 ,2)) ,1)
+BrokenLine3DLength = sum( sqrt( sum( diff(BrokenLine3D,1,1).^2 ,2)) ,1)
+</pre><pre class="codeoutput">
+Path3DLength =
+
+    4.5189
+
+
+BrokenLine3DLength =
+
+    4.3293
+
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2012b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Kinematics and Dynamics of Mechatronic Systems
+% 
+% *4th laboratory task*
+%
+% _Piotr Bury_ , _Maciej Paczocha_
+%
+%% For vectors of joint variables Q1, Q2, … QN corresponding to the prepared motion paths
+% plan the spline joint trajectory of the type 5-(5)-5.
+
+%planning of 10 segment polynomial spline joint trajectories
+%corresponding to the assumed path
+Q1=[1.570796 1.570796 1.570796 1.19029 0.785398 0 -0.5586 -0.7854 -1.49949 -1.5708];
+Q2=[-0.7854 -0.34162 0.420663 0.789412 0.723839 0.694738 0 -0.25614 -0.44343 -0.7854];
+Q3=[0.636396 0.477598 0.416293 0.535257 0.45299 0.31241 0.377359 0.394715 0.466154 0.749533];
+Q4=[-0.32503 -0.7846 0.333245 0.134268 0.055229 -0.41462 -0.49983 0.627971 0.505613 0.220485];
+% setting the duration time of each trajectory segment (in seconds)
+T=[0.2,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.2];
+% setting values of initial and final joint velocity as well as
+% the initial and final joint acceleration (usually they are set to 0s)
+V=[0 0];A=[0 0];
+% planning of the initial trajectory of type 555 (evaluation of the
+% coefficients)
+y1=fun_path(Q1,T,V,A);
+y2=fun_path(Q2,T,V,A);
+y3=fun_path(Q3,T,V,A);
+y4=fun_path(Q4,T,V,A);
+% setting the time axis resolution
+dt=0.01;
+% calculate joint displacements, velocities and accelerations for 3 joints
+wb1=waitbar(0,'calculate joint displacement');
+[q1,v1,aa1,tt,ti]=fun_graph(y1,T,dt,'r');
+i=1;waitbar(i/3,wb1)
+[q2,v2,aa2,tt,ti]=fun_graph(y2,T,dt,'b');
+i=2;waitbar(i/3,wb1)
+[q3,v3,aa3,tt,ti]=fun_graph(y3,T,dt,'g');
+i=3;waitbar(i/3,wb1)
+[q4,v4,aa4,tt,ti]=fun_graph(y4,T,dt,'g');
+i=4;waitbar(i/3,wb1)
+close(wb1);
+
+%% Evaluate, present graphically and assess the resultant Cartesian path and the broken line resulting from composition of Q1, Q2, … QN vectors for the both paths 
+syms th1 d2 th3 th4 a2 a3
+% calculate displacement in 3D - formulas
+XX=cos(th1)*(a2+a3*cos(th3));
+YY=sin(th1)*(a2+a3*cos(th3));
+ZZ=d2-a3*sin(th3);
+% calculate the 3D path
+X=double(subs(XX,{th1,d2,th3,th4,a2,a3},{q1,q2,q3,q4,0.1,0.5}));
+Y=double(subs(YY,{th1,d2,th3,th4,a2,a3},{q1,q2,q3,q4,0.1,0.5}));
+Z=double(subs(ZZ,{th1,d2,th3,th4,a2,a3},{q1,q2,q3,q4,0.1,0.5}));
+% calculate the 3D broken line
+XQ=double(subs(XX,{th1,d2,th3,th4,a2,a3},{Q1,Q2,Q3,q4,0.1,0.5}));
+YQ=double(subs(YY,{th1,d2,th3,th4,a2,a3},{Q1,Q2,Q3,q4,0.1,0.5}));
+ZQ=double(subs(ZZ,{th1,d2,th3,th4,a2,a3},{Q1,Q2,Q3,q4,0.1,0.5}));
+
+%%
+%Draw the paths
+figure(4)
+plot3(X',Y',Z','REPLACE_WITH_DASH_DASHg');
+figure(5)
+plot3(XQ,YQ,ZQ,'REPLACE_WITH_DASH_DASHr');
+%% 
+%Concatenating coodinate vectors to form data for both paths
+Path3D=[X,Y,Z];
+BrokenLine3D=[XQ',YQ',ZQ'];
+
+Path3DLength = sum( sqrt( sum( diff(Path3D,1,1).^2 ,2)) ,1)
+BrokenLine3DLength = sum( sqrt( sum( diff(BrokenLine3D,1,1).^2 ,2)) ,1)
+##### SOURCE END #####
+--></body></html>
